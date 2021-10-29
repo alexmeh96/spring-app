@@ -30,4 +30,4 @@ jobs:
       
   publish:
   
-    needs: build
+      needs: build
