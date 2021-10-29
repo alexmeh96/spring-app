@@ -48,6 +48,7 @@ jobs:
 #          echo "::set-output name=DOCKERHUB_IMAGE_NAME::ghcr.io/${GITHUB_REPOSITORY}/${GITHUB_REPOSITORY#*/}"
 
       #     Build Docker image:
+
       - name: Build and tag image
         run: docker build -t "ghcr.io/alexmeh96/spring-app-image:${GITHUB_SHA::8}" .
 
