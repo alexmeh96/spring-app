@@ -25,11 +25,40 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-      - name: Build & push Docker image
-        uses: mr-smithers-excellent/docker-build-push@v5
-        with:
-          image: mehcoder/spring-app
-          registry: docker.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+#      - name: Build & push Docker image
+#        uses: mr-smithers-excellent/docker-build-push@v5
+#        with:
+#          image: mehcoder/spring-app
+#          registry: docker.io
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+
+#      - uses: mr-smithers-excellent/docker-build-push@v5
+#        with:
+#          image: image-name
+#          registry: ghcr.io
+#          githubOrg: override-org # optional
+#          username: ${{ secrets.GHCR_USERNAME }}
+#          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: set global env
+        id: global_env
+        run: |
+          echo "::set-output name=IMAGE_NAME::${GITHUB_REPOSITORY#*/}"
+          echo "::set-output name=DOCKERHUB_IMAGE_NAME::ghcr.io/${GITHUB_REPOSITORY}/${GITHUB_REPOSITORY#*/}"
+
+      #     Build Docker image:
+      - name: Build and tag image
+        run: |
+          docker build -t "${{ steps.global_env.outputs.DOCKERHUB_IMAGE_NAME }}:latest" -t "${{ steps.global_env.outputs.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::8}" .
+
+      - name: Docker login
+        run: docker login ghcr.io -u $GITHUB_ACTOR -p ${{secrets.GITHUB_TOKEN}}
+
+      #     Publish image to github package repository:
+      - name: Publish image
+        env:
+          IMAGE_NAME: $GITHUB_REPOSITORY
+        run: docker push "ghcr.io/$GITHUB_REPOSITORY/${{ steps.global_env.outputs.IMAGE_NAME }}"
+
       
