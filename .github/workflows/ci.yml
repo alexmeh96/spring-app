@@ -50,13 +50,13 @@ jobs:
       #     Build Docker image:
 
       - name: Build and tag image
-        run: docker build -t "ghcr.io/alexmeh96/spring-app-image:${GITHUB_SHA::8}" .
+        run: docker build -t "ghcr.io/alexmeh96/spring-app-image:latest" -t "ghcr.io/alexmeh96/spring-app-image:${GITHUB_SHA::8}" .
 
       - name: Docker login
         run: docker login ghcr.io -u $GITHUB_ACTOR -p ${{secrets.GITHUB_TOKEN}}
 
       #     Publish image to github package repository:
       - name: Publish image
-        run: docker push "ghcr.io/alexmeh96/spring-app-image:${GITHUB_SHA::8}"
+        run: docker push "ghcr.io/alexmeh96/spring-app-image"
 
       
