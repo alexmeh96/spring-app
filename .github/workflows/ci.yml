@@ -57,6 +57,6 @@ jobs:
 
       #     Publish image to github package repository:
       - name: Publish image
-        run: docker push "ghcr.io/alexmeh96/spring-app-image"
+        run: docker push "ghcr.io/alexmeh96/spring-app-image:${GITHUB_SHA::8}"
 
       
