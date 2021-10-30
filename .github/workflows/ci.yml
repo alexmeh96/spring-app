@@ -66,16 +66,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: set global env
+        id: global_env
+        run: echo "::set-output name=DOCKER_TAG::${GITHUB_SHA::8}"
+
       - name: Deploy in EC2
         env:
           PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
           SSH_EC2: ${{ secrets.SSH_EC2  }}
-          TAG_DOCKER: "${GITHUB_SHA::8}"
+          DOCKER_TAG: ${{ steps.global_env.outputs.DOCKER_TAG }}
 
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_EC2} "
 
-            sudo docker pull ghcr.io/alexmeh96/spring-app-image:$TAG_DOCKER &&
-            sudo docker run -d -p 80:8080 ghcr.io/alexmeh96/spring-app-image:$TAG_DOCKER
+            sudo docker pull ghcr.io/alexmeh96/spring-app-image:DOCKER_TAG &&
+            sudo docker run -d -p 80:8080 ghcr.io/alexmeh96/spring-app-image:DOCKER_TAG
           "
