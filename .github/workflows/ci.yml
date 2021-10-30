@@ -90,8 +90,8 @@ jobs:
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
           scp -o StrictHostKeyChecking=no -i private_key.pem ./docker-compose.yml ./default.conf ${SSH_EC2}:/home/ubuntu/
 
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_EC2} '
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_EC2} "
             echo "DOCKER_TAG=$DOCKER_TAG" > .env;
             sudo docker-compose build;
             sudo docker-compose up -d
-          '
+          "
