@@ -70,7 +70,7 @@ jobs:
         env:
           PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
           SSH_EC2: ${{ secrets.SSH_EC2  }}
-          TAG_DOCKER: ${GITHUB_SHA::8}
+          TAG_DOCKER: ${{ GITHUB_SHA::8 }}
 
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
