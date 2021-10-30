@@ -88,7 +88,7 @@ jobs:
 
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-          scp -i "private_key.pem" ./docker-compose.yml ${SSH_EC2}:/home/ubuntu/docker-compose.yml
+          scp -i private_key.pem ./docker-compose.yml ${SSH_EC2}:/home/ubuntu/docker-compose.yml
 #          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_EC2} "
 #
 #          "
