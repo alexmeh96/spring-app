@@ -59,4 +59,20 @@ jobs:
       - name: Publish image
         run: docker push "ghcr.io/alexmeh96/spring-app-image:${GITHUB_SHA::8}"
 
-      
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy in EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
+          SSH_EC2: ${{ secrets.SSH_EC2  }}
+
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${SSH_EC2}
+          sudo docker pull "ghcr.io/alexmeh96/spring-app/spring-app:${GITHUB_SHA::8}"
+          sudo docker run -p 80:8080 "ghcr.io/alexmeh96/spring-app/spring-app:${GITHUB_SHA::8}"

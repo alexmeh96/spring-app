@@ -8,6 +8,6 @@ public class MainControl {
 
     @GetMapping
     public String main() {
-        return "Hello world";
+        return "Hello world. This is auto deploy!";
     }
 }
