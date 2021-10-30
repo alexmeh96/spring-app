@@ -77,11 +77,18 @@ jobs:
           SSH_EC2: ${{ secrets.SSH_EC2  }}
           DOCKER_TAG: ${{ steps.global_env.outputs.DOCKER_TAG }}
 
+#        run: |
+#          echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
+#          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_EC2} "
+#
+#            sudo docker pull ghcr.io/alexmeh96/spring-app-image:$DOCKER_TAG;
+#            sudo docker ps -q | sudo xargs docker stop;
+#            sudo docker run -d -p 80:8080 ghcr.io/alexmeh96/spring-app-image:$DOCKER_TAG
+#          "
+
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_EC2} "
-
-            sudo docker pull ghcr.io/alexmeh96/spring-app-image:$DOCKER_TAG;
-            sudo docker ps -q | sudo xargs docker stop;
-            sudo docker run -d -p 80:8080 ghcr.io/alexmeh96/spring-app-image:$DOCKER_TAG
-          "
+          scp -i "private_key.pem" ./docker-compose.yml ${SSH_EC2}:/home/ubuntu/docker-compose.yml
+#          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_EC2} "
+#
+#          "
