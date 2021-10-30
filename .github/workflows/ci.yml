@@ -70,12 +70,12 @@ jobs:
         env:
           PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
           SSH_EC2: ${{ secrets.SSH_EC2  }}
-          TAG_DOCKER: ${GITHUB_SHA::8 }
+          TAG_DOCKER: latest
 
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_EC2} '
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_EC2} "
 
             sudo docker pull ghcr.io/alexmeh96/spring-app-image:$TAG_DOCKER &&
             sudo docker run -d -p 80:8080 ghcr.io/alexmeh96/spring-app-image:$TAG_DOCKER
-          '
+          "
