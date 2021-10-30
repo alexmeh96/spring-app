@@ -74,5 +74,5 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_EC2}
-          sudo docker pull "ghcr.io/alexmeh96/spring-app/spring-app:${GITHUB_SHA::8}"
-          sudo docker run -p 80:8080 "ghcr.io/alexmeh96/spring-app/spring-app:${GITHUB_SHA::8}"
+          sudo docker pull "ghcr.io/alexmeh96/spring-app-image:${GITHUB_SHA::8}"
+          sudo docker run -p 80:8080 "ghcr.io/alexmeh96/spring-app-image:${GITHUB_SHA::8}"
