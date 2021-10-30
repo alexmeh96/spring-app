@@ -8,6 +8,6 @@ public class MainControl {
 
     @GetMapping
     public String main() {
-        return "Hello Alex. This is auto deploy with docker compose!!!";
+        return "Hello Alex. This is auto deploy with docker compose!!! CI/CD";
     }
 }
